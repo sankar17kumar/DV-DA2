@@ -1,0 +1,75 @@
+---
+title: "DA DV2"
+author: "20bce1982"
+date: "12/04/2022"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+data(iris)
+```
+
+## Scatter Plot Matrix
+```{r}
+my_cols <- c("#00AFBB", "#E7B800", "#FC4E07")  
+pairs(iris[,1:4], pch = 19,  cex = 0.5,
+      col = my_cols[iris$Species])
+```
+
+## Parallel Plot
+```{r}
+library(plotly)
+df <- read.csv("https://raw.githubusercontent.com/bcdunbar/datasets/master/iris.csv")
+fig <- df %>% plot_ly(type = 'parcoords',
+          line = list(color = ~species_id,
+                      colorscale = list(c(0,'red'),c(0.5,'green'),c(1,'blue'))),
+          dimensions = list(
+            list(range = c(2,4.5),
+                 label = 'Sepal Width', values = ~sepal_width),
+            list(range = c(4,8),
+                 constraintrange = c(5,6),
+                 label = 'Sepal Length', values = ~sepal_length),
+            list(range = c(0,2.5),
+                 label = 'Petal Width', values = ~petal_width),
+            list(range = c(1,7),
+                 label = 'Petal Length', values = ~petal_length)
+            )
+          )
+fig
+```
+
+## Trellis Plot
+```{r}
+library(lattice)
+attach(mtcars)
+# create factors with value labels
+gear.f<-factor(gear,levels=c(3,4,5),
+   labels=c("3gears","4gears","5gears"))
+cyl.f <-factor(cyl,levels=c(4,6,8),
+   labels=c("4cyl","6cyl","8cyl"))
+# scatterplots for each combination of two factors
+xyplot(mpg~wt|cyl.f*gear.f,
+   main="Trellis Plot by Cylinders and Gears",
+   ylab="Miles per Gallon", xlab="Car Weight")
+```
+
+## heatmap
+```{r}
+df2 <- as.matrix(iris[,1:4])
+heatmap(df2)
+```
+
+## Pair Plots
+```{r}
+library(Gally)
+ggpairs(iris,columns=1:4)  
+```
+
